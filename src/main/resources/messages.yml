@@ -1,0 +1,15 @@
+prefix: '&8<&bHrainAC&8>&r &7'
+flags:
+  timer: '%player% failed tickrate. &6(%vl%VL) &8[&bMoveAddition&8], ping: %ping%,
+    TPS: %tps%'
+  phase: '%player% &f检测到&r &b(Phase). 穿过 %block%. &6(%vl%VL) &8[&bMoveAddition&8]'
+  fabricatedmove: '%player% failed fabricated move, &6(%vl%VL) &8[&bMoveAddition&8]'
+  invalidpitch: '%player% &f检测到&r &b(InvalidPitch). &6(%vl%VL) &8[&bMoveAddition&8]'
+  smallhop: '%player% &f检测到&r &b(Small-Hop), &6(%vl%VL) &8[&bMoveAddition&8]'
+  strafe: '%player% &f检测到&r &b(Strafe), &6(%vl%VL) &8[&bMoveAddition&8]'
+  noclip: '%player% &f检测到&r &b(No-Clip). 穿进 %block%. &6(%vl%VL) &8[&bMoveAddition&8]'
+  inventoryactions: '%player% &f检测到&r &b(Inventory<Hit/Move>), &6(%vl%VL) &8[&bMoveAddition&8]'
+  entityinteractreach: '%player% &f检测到&r &b(Reach), &6(%vl%VL) &8[&bMoveAddition&8] '
+  sprintdirection: '%player% &f检测到&r &b(SprintDirection), &6(%vl%VL) &8[&bMoveAddition&8]'
+  fly: '%player% &f检测到&r &b(Fly), &6(%vl%VL) &8[&bMoveAddition&8]'
+unknownCommandMsg: Unknown command. Type "/help" for help.

@@ -1,0 +1,94 @@
+timer:
+  enabled: true
+  cancelThreshold: 5
+  flagThreshold: 50
+  vlPassMultiplier: 0.995
+  flagCooldown: 10000
+  punishCommands: []
+  clockDriftThresholdMillis: 50
+  maxCatchupTimeMillis: 2000
+  debug: false
+  minRateMultiplier: 0.999
+  maxRateMultiplier: 1.005
+  rubberband: true
+  ignoreTicksAfterLongTeleport: 150
+phase:
+  enabled: false
+  cancelThreshold: 20
+  flagThreshold: 10
+  vlPassMultiplier: 0.995
+  flagCooldown: 5000
+  punishCommands: []
+fabricatedmove:
+  enabled: false
+  cancelThreshold: 2
+  flagThreshold: 8
+  vlPassMultiplier: 0.999
+  flagCooldown: 5000
+  punishCommands:
+    - 12:2:ban %player% &8< &bHrainAC &7| &bFabricatedMove &8> 30d
+invalidpitch:
+  enabled: false
+  cancelThreshold: -1
+  flagThreshold: 5
+  vlPassMultiplier: 0.9
+  flagCooldown: 5000
+  punishCommands: []
+smallhop:
+  enabled: true
+  cancelThreshold: 8
+  flagThreshold: 5
+  vlPassMultiplier: 0.99
+  flagCooldown: 5000
+  punishCommands:
+    - 13:2:punishmc ban %player% 0 Motion 30d
+strafe:
+  enabled: true
+  cancelThreshold: 28
+  flagThreshold: 40
+  vlPassMultiplier: 0.99
+  flagCooldown: 5000
+  punishCommands: []
+  yawErrorThreshold: 0.5
+noclip:
+  enabled: false
+  cancelThreshold: 20
+  flagThreshold: 60
+  vlPassMultiplier: 0.995
+  flagCooldown: 5000
+  punishCommands: []
+inventoryactions:
+  enabled: false
+  cancelThreshold: 3
+  flagThreshold: 5
+  vlPassMultiplier: 0.999
+  flagCooldown: 5000
+  punishCommands: []
+sprintdirection:
+  enabled: true
+  cancelThreshold: 25
+  flagThreshold: 35
+  vlPassMultiplier: 0.999
+  flagCooldown: 5000
+  punishCommands:
+    - 40:2:punishmc ban %player% 0 Move 30d
+fly:
+  enabled: false
+  cancelThreshold: 0
+  flagThreshold: 10
+  vlPassMultiplier: 0.995
+  flagCooldown: 5000
+  punishCommands: []
+entityinteractreach:
+  enabled: false
+  cancelThreshold: -1
+  flagThreshold: 8
+  vlPassMultiplier: 0.9
+  flagCooldown: 5000
+  punishCommands:
+    - 15:2:coc %player% if -lp-<5 do ban %player% &8< &bHrainAC &7| &bReach-Learn &8> 30d
+  maxReach: 3.01
+  maxReachCreative: 5.0
+  pingLimit: -1
+  lagCompensation: true
+  checkOtherEntities: false

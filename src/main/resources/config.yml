@@ -1,0 +1,30 @@
+sendJSONMessages: false
+playSoundOnFlag: false
+flagClickCommand: tp %player%
+sql:
+  enabled: false
+  updateInterval: 60
+  host: 127.0.0.1
+  port: '3306'
+  characterEncoding: utf8
+  database: ''
+  username: ''
+  password: ''
+commandExecutor:
+  cooldownTicks: 1
+gui: false
+lagCompensation:
+  historySize: 20
+  pingOffset: 175
+  entityTracking:
+    searchWidth: 40
+    searchHeight: 20
+    searchRate: 20
+    alwaysTickPlayers: true
+  debug: false
+logToFile: true
+enableBungeeAlerts: false
+asyncChecking: false
+mouseRecorder:
+  resolution: 3.0
+  defaultRecordingTime: 10.0

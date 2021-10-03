@@ -1,0 +1,38 @@
+name: HrainMoveAddition
+main: me.nuymakstone.hrainac.HrainMoveAddition
+version: 1.4
+author: NuymakStone
+description: An anticheat system
+depend:
+  - ProtocolLib
+softdepend:
+  - packetevents
+  - NoCheatPlus
+commands:
+  HrainMoveAddition:
+        description: Basic information about HrainMoveAddition Anticheat
+        usage: /<command>
+permissions:
+  hrainac.admin:
+    description: Grants permission to perform administrative HrainMoveAddition tasks.
+    default: op
+  hrainac.cmd:
+    description: Gives access to help menu.
+    default: op
+  hrainac.cmd.*:
+    description: Gives access to any HrainMoveAddition command.
+    default: op
+    children:
+      hrainac.cmd: true
+  hrainac.alerts:
+    description: Allows one to recieve HrainMoveAddition notifications.
+    default: op
+  hrainac.bypass:
+    description: Allows one to bypass a check. (You must specify the check with an additional node, such as "HrainMoveAddition.bypass.speed")
+    default: op
+  hrainac.bypassresync:
+    description: Prevents having actions forcibly resynchronized by the anticheat. Use only for testing purposes, such as anticheat test servers.
+    default: op
+  hrainac.gui:
+    description: Gives access to the GUI.
+    default: op
