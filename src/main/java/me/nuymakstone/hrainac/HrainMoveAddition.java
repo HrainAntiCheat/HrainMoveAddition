@@ -59,7 +59,7 @@ public class HrainMoveAddition extends JavaPlugin implements Listener {
     //If you don't like my HashMap soup, then guess what: I don't care.
     //Made with passion in U.S.A.
     public static Map<UUID, player> map;
-    public static Map<Player, Boolean> shoot;
+    public static HashMap<Player, Boolean> shoot = new HashMap<Player, Boolean>();
     private CheckManager checkManager;
     private SQLModule sqlModule;
     private HrainMoveAddition plugin;

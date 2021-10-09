@@ -28,7 +28,7 @@ public class NCPMoveHook implements NCPHook {
         } else if (!vlInfo.willCancel()) {
             return false;
         } else {
-            if (HrainMoveAddition.shoot.get(p) == true) {
+            if (HrainMoveAddition.shoot.containsKey(p) && HrainMoveAddition.shoot.containsValue(true)) {
                 return true;
             } else {
 

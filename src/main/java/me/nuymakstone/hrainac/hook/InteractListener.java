@@ -13,12 +13,11 @@ import me.nuymakstone.hrainac.HrainMoveAddition.*;
 public class InteractListener implements Listener {
     @EventHandler
     public void onShoot(PlayerInteractEvent e) {
+        HrainMoveAddition.shoot.put(e.getPlayer(),false);
         if (e.getItem() != null && e.getItem().getType() == Material.BOW) {
             if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 //If item == Material.BOW
                 HrainMoveAddition.shoot.put(e.getPlayer(),true);
-            }else{
-                HrainMoveAddition.shoot.put(e.getPlayer(),false);
             }
         }
     }
