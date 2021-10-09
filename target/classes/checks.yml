@@ -86,7 +86,7 @@ entityinteractreach:
   vlPassMultiplier: 0.9
   flagCooldown: 5000
   punishCommands:
-    - 15:2:coc %player% if -lp-<5 do ban %player% &8< &bHrainAC &7| &bReach-Learn &8> 30d
+    - 15:2:coc %player% if -lp-<5 do ban %player% &8< &bHrainAC &7| &bReach &8> 30d
   maxReach: 3.01
   maxReachCreative: 5.0
   pingLimit: -1

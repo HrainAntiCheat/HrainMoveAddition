@@ -144,6 +144,7 @@ me\nuymakstone\hrainac\command\AlertArgument.class
 me\nuymakstone\hrainac\module\PlayerEventListener$4.class
 me\nuymakstone\hrainac\module\HrainACSyncTaskScheduler.class
 me\nuymakstone\hrainac\event\bukkit\HrainACAsyncPlayerMetadataEvent.class
+me\nuymakstone\hrainac\hook\InteractListener.class
 me\nuymakstone\hrainac\gui\MainMenuWindow.class
 me\nuymakstone\hrainac\check\movement\position\Inertia.class
 me\nuymakstone\hrainac\check\combat\FightAccuracy$1.class

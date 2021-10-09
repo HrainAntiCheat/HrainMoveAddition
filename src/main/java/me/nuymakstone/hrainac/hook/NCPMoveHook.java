@@ -28,58 +28,60 @@ public class NCPMoveHook implements NCPHook {
         } else if (!vlInfo.willCancel()) {
             return false;
         } else {
-            if(p.getItemInHand().getType().equals(Material.BOW)){
-                return false;
-            }
-            player pl = (player)HrainMoveAddition.map.get(p.getUniqueId());
-            if (System.currentTimeMillis() - pl.stairbuffer < 1000L) {
-                return pl.buffer;
+            if (HrainMoveAddition.shoot.get(p) == true) {
+                return true;
             } else {
-                pl.stairbuffer = System.currentTimeMillis();
-                boolean trap = false;
-                boolean ice = false;
 
-                int i;
-                for(int x = -2; x <= 2; ++x) {
-                    for(i = -2; i <= 2; ++i) {
-                        for(float y = -1.6F; y < 1.0F; y += 0.5F) {
-                            String inv = p.getLocation().clone().add((double)x, (double)y, (double)i).getBlock().getType().toString();
-                            if (inv.contains("STAIR") || inv.contains("STEP")) {
+                player pl = (player) HrainMoveAddition.map.get(p.getUniqueId());
+                if (System.currentTimeMillis() - pl.stairbuffer < 1000L) {
+                    return pl.buffer;
+                } else {
+                    pl.stairbuffer = System.currentTimeMillis();
+                    boolean trap = false;
+                    boolean ice = false;
+
+                    int i;
+                    for (int x = -2; x <= 2; ++x) {
+                        for (i = -2; i <= 2; ++i) {
+                            for (float y = -1.6F; y < 1.0F; y += 0.5F) {
+                                String inv = p.getLocation().clone().add((double) x, (double) y, (double) i).getBlock().getType().toString();
+                                if (inv.contains("STAIR") || inv.contains("STEP")) {
+                                    pl.buffer = true;
+                                    HrainMoveAddition.map.put(p.getUniqueId(), pl);
+                                    return true;
+                                }
+
+                                if (inv.contains("TRAP_DOOR") || inv.contains("TRAPDOOR")) {
+                                    trap = true;
+                                }
+
+                                if (inv.contains("ICE")) {
+                                    ice = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (trap && ice) {
+                        pl.buffer = true;
+                        HrainMoveAddition.map.put(p.getUniqueId(), pl);
+                        return true;
+                    } else {
+                        List<Entity> entities = p.getNearbyEntities(2.0D, 2.0D, 2.0D);
+
+                        for (i = 0; i < entities.size(); ++i) {
+                            Entity ent = (Entity) entities.get(i);
+                            if (ent.getType() == EntityType.BOAT) {
                                 pl.buffer = true;
                                 HrainMoveAddition.map.put(p.getUniqueId(), pl);
                                 return true;
                             }
-
-                            if (inv.contains("TRAP_DOOR") || inv.contains("TRAPDOOR")) {
-                                trap = true;
-                            }
-
-                            if (inv.contains("ICE")) {
-                                ice = true;
-                            }
                         }
+
+                        pl.buffer = false;
+                        HrainMoveAddition.map.put(p.getUniqueId(), pl);
+                        return false;
                     }
-                }
-
-                if (trap && ice) {
-                    pl.buffer = true;
-                    HrainMoveAddition.map.put(p.getUniqueId(), pl);
-                    return true;
-                } else {
-                    List<Entity> entities = p.getNearbyEntities(2.0D, 2.0D, 2.0D);
-
-                    for(i = 0; i < entities.size(); ++i) {
-                        Entity ent = (Entity)entities.get(i);
-                        if (ent.getType() == EntityType.BOAT) {
-                            pl.buffer = true;
-                            HrainMoveAddition.map.put(p.getUniqueId(), pl);
-                            return true;
-                        }
-                    }
-
-                    pl.buffer = false;
-                    HrainMoveAddition.map.put(p.getUniqueId(), pl);
-                    return false;
                 }
             }
         }

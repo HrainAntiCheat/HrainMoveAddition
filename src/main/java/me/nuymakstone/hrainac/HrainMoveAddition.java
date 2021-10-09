@@ -21,6 +21,7 @@ package me.nuymakstone.hrainac;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.nuymakstone.hrainac.command.HrainACCommand;
+import me.nuymakstone.hrainac.hook.InteractListener;
 import me.nuymakstone.hrainac.hook.NCPDragDown;
 import me.nuymakstone.hrainac.hook.NCPMoveHook;
 import me.nuymakstone.hrainac.hook.player;
@@ -45,6 +46,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,10 +54,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HrainMoveAddition extends JavaPlugin implements Listener {
     public static Plugin instance;
     public static ProtocolManager protocolManager;
+
     //I take that back: this game does have its problems, but it's still fun to play on.
     //If you don't like my HashMap soup, then guess what: I don't care.
     //Made with passion in U.S.A.
     public static Map<UUID, player> map;
+    public static Map<Player, Boolean> shoot;
     private CheckManager checkManager;
     private SQLModule sqlModule;
     private HrainMoveAddition plugin;
@@ -152,6 +156,7 @@ public class HrainMoveAddition extends JavaPlugin implements Listener {
         mouseRecorder = new MouseRecorder(this);
 
         PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new InteractListener(),this);
         //NPC检查
         //pm.registerEvents(new NpcMonitor(),this);
         registerCommand();
