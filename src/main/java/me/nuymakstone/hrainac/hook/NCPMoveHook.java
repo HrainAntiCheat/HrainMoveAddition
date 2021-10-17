@@ -2,7 +2,9 @@ package me.nuymakstone.hrainac.hook;
 
 import fr.neatmonster.nocheatplus.checks.*;
 import fr.neatmonster.nocheatplus.checks.access.*;
+import me.nuymakstone.hrainac.HrainACPlayer;
 import me.nuymakstone.hrainac.HrainMoveAddition;
+import me.nuymakstone.hrainac.event.MoveEvent;
 import net.minecraft.server.v1_8_R3.ItemStack;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -28,7 +30,8 @@ public class NCPMoveHook implements NCPHook {
         } else if (!vlInfo.willCancel()) {
             return false;
         } else {
-            if (HrainMoveAddition.shoot.containsKey(p) && HrainMoveAddition.shoot.containsValue(true)) {
+            Entity entity = p;
+            if (HrainMoveAddition.shoot.containsKey(p) && HrainMoveAddition.shoot.containsValue(true) && entity.isOnGround() && !p.isSprinting()) {
                 return true;
             } else {
 

@@ -29,6 +29,7 @@ import me.nuymakstone.hrainac.wrap.entity.WrappedEntity;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -60,79 +61,83 @@ public class Strafe extends MovementCheck {
         if (getProtocolVersion(e.getPlayer()) <= 47){
         if (m == Material.STATIONARY_WATER || m == Material.WATER || m == Material.LAVA || m == Material.STATIONARY_LAVA) {
         } else {
-            boolean bounced = bouncedSet.contains(pp.getUuid());
-            boolean collidingHorizontally = collidingHorizontally(e);
-
-            Block footBlock = ServerUtils.getBlockAsync(pp.getPlayer().getLocation().clone().add(0, -0.2, 0));
-            if (footBlock == null)
+            if (e.getPlayer().hasPotionEffect(PotionEffectType.INVISIBILITY)) {//修复起床旁观者tp误判
                 return;
+            }else{
+                boolean bounced = bouncedSet.contains(pp.getUuid());
+                boolean collidingHorizontally = collidingHorizontally(e);
 
-            long ticksSinceIdle = pp.getCurrentTick() - lastIdleTick.getOrDefault(pp.getUuid(), pp.getCurrentTick());
-            double friction = e.getFriction();
-            //A really rough check to handle sneaking on edge of blocks.
-            boolean sneakEdge = pp.isSneaking() && !WrappedBlock.getWrappedBlock(footBlock, pp.getClientVersion()).isSolid() && e.isOnGround();
-            boolean wasSneakingOnEdge = wasSneakingOnEdgeSet.contains(pp.getUuid());
+                Block footBlock = ServerUtils.getBlockAsync(pp.getPlayer().getLocation().clone().add(0, -0.2, 0));
+                if (footBlock == null)
+                    return;
 
-            Vector prevVelocity = pp.getVelocity().clone();
-            if (e.hasHitSlowdown()) {
-                prevVelocity.multiply(0.6);
-            }
+                long ticksSinceIdle = pp.getCurrentTick() - lastIdleTick.getOrDefault(pp.getUuid(), pp.getCurrentTick());
+                double friction = e.getFriction();
+                //A really rough check to handle sneaking on edge of blocks.
+                boolean sneakEdge = pp.isSneaking() && !WrappedBlock.getWrappedBlock(footBlock, pp.getClientVersion()).isSolid() && e.isOnGround();
+                boolean wasSneakingOnEdge = wasSneakingOnEdgeSet.contains(pp.getUuid());
 
-            Set<Material> collidedMats = WrappedEntity.getWrappedEntity(e.getPlayer()).getCollisionBox(e.getFrom().toVector()).getMaterials(pp.getWorld());
-            List<Block> activeBlocks = e.getActiveBlocks();
-            for (Block b : activeBlocks) {
-                if (b.getType() == Material.SOUL_SAND) {
-                    prevVelocity.multiply(0.4); //which would you prefer: iterative multiplication or using Math.pow()?
+                Vector prevVelocity = pp.getVelocity().clone();
+                if (e.hasHitSlowdown()) {
+                    prevVelocity.multiply(0.6);
                 }
-                if (b.getType() == Material.WEB) {
-                    prevVelocity.multiply(0);
-                    break; //Any number times 0 is 0; no reason to continue looping.
+
+                Set<Material> collidedMats = WrappedEntity.getWrappedEntity(e.getPlayer()).getCollisionBox(e.getFrom().toVector()).getMaterials(pp.getWorld());
+                List<Block> activeBlocks = e.getActiveBlocks();
+                for (Block b : activeBlocks) {
+                    if (b.getType() == Material.SOUL_SAND) {
+                        prevVelocity.multiply(0.4); //which would you prefer: iterative multiplication or using Math.pow()?
+                    }
+                    if (b.getType() == Material.WEB) {
+                        prevVelocity.multiply(0);
+                        break; //Any number times 0 is 0; no reason to continue looping.
+                    }
                 }
-            }
 
-            boolean onSlimeblock = HrainAC.getServerVersion() > 7 && (pp.wasOnGround() || pp.isOnGround()) && footBlock.getType() == Material.SLIME_BLOCK;
-            boolean nearLiquid = testLiquid(collidedMats);
+                boolean onSlimeblock = HrainAC.getServerVersion() > 7 && (pp.wasOnGround() || pp.isOnGround()) && footBlock.getType() == Material.SLIME_BLOCK;
+                boolean nearLiquid = testLiquid(collidedMats);
 
-            if (Math.abs(prevVelocity.getX() * friction) < 0.005) {
-                prevVelocity.setX(0);
-            }
-            if (Math.abs(prevVelocity.getZ() * friction) < 0.005) {
-                prevVelocity.setZ(0);
-            }
+                if (Math.abs(prevVelocity.getX() * friction) < 0.005) {
+                    prevVelocity.setX(0);
+                }
+                if (Math.abs(prevVelocity.getZ() * friction) < 0.005) {
+                    prevVelocity.setZ(0);
+                }
 
-            double dX = e.getTo().getX() - e.getFrom().getX();
-            double dZ = e.getTo().getZ() - e.getFrom().getZ();
-            dX /= friction;
-            dZ /= friction;
-            dX -= prevVelocity.getX();
-            dZ -= prevVelocity.getZ();
+                double dX = e.getTo().getX() - e.getFrom().getX();
+                double dZ = e.getTo().getZ() - e.getFrom().getZ();
+                dX /= friction;
+                dZ /= friction;
+                dX -= prevVelocity.getX();
+                dZ -= prevVelocity.getZ();
 
-            Vector accelDir = new Vector(dX, 0, dZ);
-            Vector yaw = MathPlus.getDirection(e.getTo().getYaw(), 0);
+                Vector accelDir = new Vector(dX, 0, dZ);
+                Vector yaw = MathPlus.getDirection(e.getTo().getYaw(), 0);
 
-            if (e.isTeleportAccept() || e.hasAcceptedKnockback() || bounced || collidingHorizontally ||
-                    !e.isUpdatePos() || sneakEdge || e.isJump() || ticksSinceIdle <= 2 || nearLiquid || //TODO get rid of e.isJump() from here and actually try to handle it
-                    pp.getCurrentTick() - pp.getLastVelocityAcceptTick() == 1 || collidedMats.contains(Material.LADDER) ||
-                    collidedMats.contains(Material.VINE) || wasSneakingOnEdge || onSlimeblock || (e.isStep() && pp.isSprinting())) {
+                if (e.isTeleportAccept() || e.hasAcceptedKnockback() || bounced || collidingHorizontally ||
+                        !e.isUpdatePos() || sneakEdge || e.isJump() || ticksSinceIdle <= 2 || nearLiquid || //TODO get rid of e.isJump() from here and actually try to handle it
+                        pp.getCurrentTick() - pp.getLastVelocityAcceptTick() == 1 || collidedMats.contains(Material.LADDER) ||
+                        collidedMats.contains(Material.VINE) || wasSneakingOnEdge || onSlimeblock || (e.isStep() && pp.isSprinting())) {
+                    prepareNextMove(e, pp, pp.getCurrentTick(), sneakEdge);
+                    return;
+                }
+
+                //You aren't pressing a WASD key
+                if (accelDir.lengthSquared() < 0.000001) {
+                    prepareNextMove(e, pp, pp.getCurrentTick(), sneakEdge);
+                    return;
+                }
+
+                boolean vectorDir = accelDir.clone().crossProduct(yaw).dot(new Vector(0, 1, 0)) >= 0;
+                double angle = (vectorDir ? 1 : -1) * MathPlus.angle(accelDir, yaw);
+
+                if (!isValidStrafe(angle)) {
+                    punishAndTryRubberband(pp, e);
+                } else
+                    reward(pp);
+
                 prepareNextMove(e, pp, pp.getCurrentTick(), sneakEdge);
-                return;
             }
-
-            //You aren't pressing a WASD key
-            if (accelDir.lengthSquared() < 0.000001) {
-                prepareNextMove(e, pp, pp.getCurrentTick(), sneakEdge);
-                return;
-            }
-
-            boolean vectorDir = accelDir.clone().crossProduct(yaw).dot(new Vector(0, 1, 0)) >= 0;
-            double angle = (vectorDir ? 1 : -1) * MathPlus.angle(accelDir, yaw);
-
-            if (!isValidStrafe(angle)) {
-                punishAndTryRubberband(pp, e);
-            } else
-                reward(pp);
-
-            prepareNextMove(e, pp, pp.getCurrentTick(), sneakEdge);
         }
         }
 }

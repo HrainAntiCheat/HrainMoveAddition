@@ -6,9 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import me.nuymakstone.hrainac.HrainMoveAddition.*;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class InteractListener implements Listener {
     @EventHandler
@@ -20,5 +22,9 @@ public class InteractListener implements Listener {
                 HrainMoveAddition.shoot.put(e.getPlayer(),true);
             }
         }
+    }
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e){
+        HrainMoveAddition.shoot.put(e.getPlayer(),false);
     }
 }
